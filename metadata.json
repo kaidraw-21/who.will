@@ -1,0 +1,5 @@
+{
+  "name": "FairPick",
+  "description": "A fair random picker using a weighted wheel of fortune where probability decreases as selection count increases.",
+  "requestFramePermissions": []
+}
