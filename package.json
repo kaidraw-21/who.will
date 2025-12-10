@@ -9,13 +9,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "react": "^19.2.1",
-    "react-dom": "^19.2.1",
-    "lucide-react": "^0.556.0",
-    "chartjs-plugin-datalabels": "^2.2.0",
+    "canvas-confetti": "^1.9.2",
     "chart.js": "^4.5.1",
+    "chartjs-plugin-datalabels": "^2.2.0",
+    "lucide-react": "^0.556.0",
+    "react": "^19.2.1",
     "react-chartjs-2": "^5.3.1",
-    "canvas-confetti": "1.9.2"
+    "react-dom": "^19.2.1"
   },
   "devDependencies": {
     "@types/node": "^22.14.0",

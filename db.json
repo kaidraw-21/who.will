@@ -1,0 +1,20 @@
+{
+  "users": {
+    "admin": {
+      "password": "admin123",
+      "data": [
+        { "id": "1", "name": "Alice", "count": 2, "color": "#4ECDC4" },
+        { "id": "2", "name": "Bob", "count": 5, "color": "#FF6F61" },
+        { "id": "3", "name": "Charlie", "count": 0, "color": "#FFC312" },
+        { "id": "4", "name": "Diana", "count": 1, "color": "#C4E538" }
+      ]
+    },
+    "demo": {
+      "password": "demo123",
+      "data": [
+        { "id": "1", "name": "John", "count": 0, "color": "#4ECDC4" },
+        { "id": "2", "name": "Jane", "count": 0, "color": "#FF6F61" }
+      ]
+    }
+  }
+}

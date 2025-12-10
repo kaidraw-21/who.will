@@ -1,6 +1,6 @@
 import { User } from '../types';
 
-const STORAGE_KEY = 'whowill-data-v1';
+let STORAGE_KEY = 'whowill-data-v1';
 
 // Vibrant Brutalist Palette
 const PALETTE = [
@@ -22,6 +22,10 @@ const DEFAULT_USERS: User[] = [
   { id: '3', name: 'Charlie', count: 0, color: '#FFC312' },
   { id: '4', name: 'Diana', count: 1, color: '#C4E538' },
 ];
+
+export const setCurrentUser = (username: string) => {
+  STORAGE_KEY = `whowill-data-${username}-v1`;
+};
 
 export const getStoredUsers = (): User[] => {
   try {

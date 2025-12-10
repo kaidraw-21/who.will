@@ -2,9 +2,11 @@ import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData, ChartOptions } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
-import confetti from 'canvas-confetti';
 import { User } from '../types';
 import { calculateWeights } from '../services/storage';
+
+// Import confetti dynamically
+const confetti = (window as any).confetti || (() => {});
 
 // Register Chart.js components
 ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
@@ -19,6 +21,7 @@ interface WheelProps {
 export const Wheel: React.FC<WheelProps> = ({ users, onSpinEnd, isSpinning, setIsSpinning }) => {
   const [rotation, setRotation] = useState(0);
   const [winner, setWinner] = useState<User | null>(null);
+  const [showWinnerDialog, setShowWinnerDialog] = useState(false);
   
   // Calculate segments based on weights
   const segments = useMemo(() => calculateWeights(users), [users]);
@@ -97,9 +100,6 @@ export const Wheel: React.FC<WheelProps> = ({ users, onSpinEnd, isSpinning, setI
   const handleSpin = () => {
     if (isSpinning || users.length === 0) return;
 
-    // Reset confetti from any previous runs
-    confetti.reset();
-    
     setIsSpinning(true);
     setWinner(null);
 
@@ -148,42 +148,68 @@ export const Wheel: React.FC<WheelProps> = ({ users, onSpinEnd, isSpinning, setI
     setTimeout(() => {
       setIsSpinning(false);
       setWinner(selectedSegment);
-      onSpinEnd(selectedSegment.id);
+      setShowWinnerDialog(true);
       
       // Trigger Confetti Celebration
-      const duration = 1500;
-      const end = Date.now() + duration;
-      const colors = ['#4ECDC4', '#FF6F61', '#FFC312', '#2C3A47']; // Brand colors
+      if (typeof confetti === 'function') {
+        const duration = 2000;
+        const end = Date.now() + duration;
+        const colors = ['#4ECDC4', '#FF6F61', '#FFC312', '#2C3A47'];
 
-      (function frame() {
-        // Launch confetti from left edge
-        confetti({
-          particleCount: 3,
-          angle: 60,
-          spread: 55,
-          origin: { x: 0 },
-          colors: colors,
-          zIndex: 100
-        });
-        // Launch confetti from right edge
-        confetti({
-          particleCount: 3,
-          angle: 120,
-          spread: 55,
-          origin: { x: 1 },
-          colors: colors,
-          zIndex: 100
-        });
+        (function frame() {
+          confetti({
+            particleCount: 5,
+            angle: 60,
+            spread: 55,
+            origin: { x: 0 },
+            colors: colors,
+            zIndex: 1000
+          });
+          confetti({
+            particleCount: 5,
+            angle: 120,
+            spread: 55,
+            origin: { x: 1 },
+            colors: colors,
+            zIndex: 1000
+          });
 
-        if (Date.now() < end) {
-          requestAnimationFrame(frame);
-        }
-      }());
+          if (Date.now() < end) {
+            requestAnimationFrame(frame);
+          }
+        }());
+      }
     }, 4000); 
+  };
+
+  const handleCloseDialog = () => {
+    setShowWinnerDialog(false);
+    if (winner) {
+      onSpinEnd(winner.id);
+    }
   };
 
   return (
     <div className="flex flex-col items-center justify-center w-full p-4">
+      {/* Winner Dialog */}
+      {showWinnerDialog && winner && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white border-3 border-brutal-dark shadow-hard-xl p-8 max-w-md w-full mx-4 relative">
+            <div className="absolute top-0 right-0 w-16 h-16 bg-brutal-coral border-l-3 border-b-3 border-brutal-dark -mr-8 -mt-8 rotate-12"></div>
+            <div className="text-center relative z-10">
+              <h2 className="text-xs text-brutal-dark font-bold uppercase tracking-widest mb-2">The Chosen One</h2>
+              <h1 className="text-5xl font-black text-brutal-dark uppercase mb-6">{winner.name}</h1>
+              <button
+                onClick={handleCloseDialog}
+                className="px-8 py-3 bg-brutal-teal border-3 border-brutal-dark text-brutal-dark font-black uppercase tracking-wider shadow-hard hover:-translate-y-1 hover:-translate-x-1 hover:shadow-hard-lg active:translate-y-0 active:translate-x-0 active:shadow-hard transition-all"
+              >
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Pointer */}
       <div className="relative z-10 translate-y-7">
         <div className="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-t-[40px] border-t-brutal-dark drop-shadow-[0_4px_0_rgba(0,0,0,0.2)]"></div>
@@ -218,16 +244,6 @@ export const Wheel: React.FC<WheelProps> = ({ users, onSpinEnd, isSpinning, setI
             {isSpinning ? '...' : 'SPIN'}
           </button>
         </div>
-      </div>
-      
-      {/* Winner Display */}
-      <div className="h-24 mt-12 w-full flex justify-center">
-        {winner && !isSpinning && (
-          <div className="animate-[bounce_0.5s_infinite] bg-brutal-coral border-3 border-brutal-dark shadow-hard p-4 rotate-2">
-            <p className="text-xs text-white font-bold uppercase tracking-widest mb-1">The Chosen One</p>
-            <h2 className="text-4xl font-black text-white uppercase leading-none">{winner.name}</h2>
-          </div>
-        )}
       </div>
     </div>
   );
