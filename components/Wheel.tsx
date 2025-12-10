@@ -2,6 +2,7 @@ import React, { useRef, useState, useEffect, useMemo } from 'react';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend, ChartData, ChartOptions } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import confetti from 'canvas-confetti';
 import { User } from '../types';
 import { calculateWeights } from '../services/storage';
 
@@ -96,6 +97,9 @@ export const Wheel: React.FC<WheelProps> = ({ users, onSpinEnd, isSpinning, setI
   const handleSpin = () => {
     if (isSpinning || users.length === 0) return;
 
+    // Reset confetti from any previous runs
+    confetti.reset();
+    
     setIsSpinning(true);
     setWinner(null);
 
@@ -145,6 +149,36 @@ export const Wheel: React.FC<WheelProps> = ({ users, onSpinEnd, isSpinning, setI
       setIsSpinning(false);
       setWinner(selectedSegment);
       onSpinEnd(selectedSegment.id);
+      
+      // Trigger Confetti Celebration
+      const duration = 1500;
+      const end = Date.now() + duration;
+      const colors = ['#4ECDC4', '#FF6F61', '#FFC312', '#2C3A47']; // Brand colors
+
+      (function frame() {
+        // Launch confetti from left edge
+        confetti({
+          particleCount: 3,
+          angle: 60,
+          spread: 55,
+          origin: { x: 0 },
+          colors: colors,
+          zIndex: 100
+        });
+        // Launch confetti from right edge
+        confetti({
+          particleCount: 3,
+          angle: 120,
+          spread: 55,
+          origin: { x: 1 },
+          colors: colors,
+          zIndex: 100
+        });
+
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      }());
     }, 4000); 
   };
 
