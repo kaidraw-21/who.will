@@ -1,6 +1,6 @@
 import { User } from '../types';
 
-const STORAGE_KEY = 'fairpick-data-v1';
+const STORAGE_KEY = 'whowill-data-v1';
 
 // Vibrant Brutalist Palette
 const PALETTE = [

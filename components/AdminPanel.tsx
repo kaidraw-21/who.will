@@ -44,15 +44,26 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     }
   };
 
+  const handleColorChange = (user: User, val: string) => {
+    onUpdateUser({ ...user, color: val });
+  };
+
+  const handleResetClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onResetCounts();
+  };
+
   return (
     <div className="bg-white border-3 border-brutal-dark shadow-hard-lg">
       <div className="p-4 sm:p-6 border-b-3 border-brutal-dark bg-brutal-blue flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
           <h2 className="text-2xl font-black text-brutal-dark uppercase tracking-tight">Participants</h2>
-          <p className="text-sm font-bold text-brutal-dark opacity-75">Manage names and weights</p>
+          <p className="text-sm font-bold text-brutal-dark opacity-75">Manage names, colors, and weights</p>
         </div>
         <button 
-          onClick={onResetCounts}
+          type="button"
+          onClick={handleResetClick}
           className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-brutal-dark bg-brutal-coral border-2 border-brutal-dark shadow-hard-sm hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-hard transition-all active:translate-y-0 active:translate-x-0 active:shadow-none"
         >
           <RefreshCcw size={18} strokeWidth={3} />
@@ -85,7 +96,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
           <table className="w-full text-left border-collapse">
             <thead className="bg-brutal-dark text-white">
               <tr className="text-xs font-black uppercase tracking-wider">
-                <th className="py-4 px-4 border-r-2 border-gray-600">Color</th>
+                <th className="py-4 px-4 border-r-2 border-gray-600 w-20">Color</th>
                 <th className="py-4 px-4 border-r-2 border-gray-600">Name</th>
                 <th className="py-4 px-4 text-center border-r-2 border-gray-600">Picked</th>
                 <th className="py-4 px-4 text-right border-r-2 border-gray-600">Chance</th>
@@ -103,10 +114,15 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 usersWithStats.map((user) => (
                   <tr key={user.id} className="hover:bg-brutal-blue/30 transition-colors group font-bold">
                     <td className="py-3 px-4 border-r-2 border-brutal-dark">
-                      <div 
-                        className="w-8 h-8 rounded-none border-2 border-brutal-dark shadow-[2px_2px_0_0_#000]"
-                        style={{ backgroundColor: user.color }}
-                      />
+                      <div className="relative w-10 h-10">
+                        <input 
+                          type="color" 
+                          value={user.color}
+                          onChange={(e) => handleColorChange(user, e.target.value)}
+                          className="w-full h-full p-0 border-2 border-brutal-dark cursor-pointer shadow-[2px_2px_0_0_#000] hover:shadow-none hover:translate-y-[2px] hover:translate-x-[2px] transition-all box-border"
+                          title="Change color"
+                        />
+                      </div>
                     </td>
                     <td className="py-3 px-4 border-r-2 border-brutal-dark text-lg">
                       {user.name}
@@ -125,6 +141,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                     </td>
                     <td className="py-3 px-4 text-right">
                       <button 
+                        type="button"
                         onClick={() => onDeleteUser(user.id)}
                         className="p-2 text-brutal-dark bg-gray-100 border-2 border-brutal-dark hover:bg-red-500 hover:text-white hover:shadow-hard-sm transition-all active:translate-y-0.5 active:translate-x-0.5 active:shadow-none"
                         title="Delete user"

@@ -54,9 +54,9 @@ const App: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setActiveTab('picker')}>
             <div className="w-10 h-10 bg-brutal-teal border-2 border-brutal-dark shadow-hard-sm group-hover:shadow-hard transition-all flex items-center justify-center">
-              <span className="text-brutal-dark font-black text-2xl">F</span>
+              <span className="text-brutal-dark font-black text-2xl">W</span>
             </div>
-            <h1 className="text-2xl font-black text-brutal-dark uppercase tracking-tighter italic">FairPick</h1>
+            <h1 className="text-2xl font-black text-brutal-dark uppercase tracking-tighter italic">Who.Will?</h1>
           </div>
           
           <nav className="flex items-center gap-3">
@@ -133,7 +133,7 @@ const App: React.FC = () => {
       <footer className="bg-white border-t-3 border-brutal-dark py-8 mt-auto">
         <div className="max-w-5xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="font-black text-brutal-dark uppercase tracking-wider">
-            FairPick © {new Date().getFullYear()}
+            Who.Will? © {new Date().getFullYear()}
           </div>
           <div className="flex gap-4">
             <span className="w-4 h-4 bg-brutal-teal border border-brutal-dark shadow-[2px_2px_0_0_#000]"></span>
