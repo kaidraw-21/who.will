@@ -23,7 +23,7 @@ const Login = ({ onLogin, error }: { onLogin: (username: string, password: strin
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-3 mb-4">
             <div className="w-16 h-16 bg-brutal-teal border-3 border-brutal-dark shadow-hard flex items-center justify-center">
-              <span className="text-brutal-dark font-black text-4xl">W</span>
+              <span className="text-brutal-dark font-black text-3xl">W?</span>
             </div>
             <h1 className="text-4xl font-black text-brutal-dark uppercase tracking-tighter italic">Who.Will?</h1>
           </div>
@@ -168,7 +168,7 @@ const App: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
           <div className="flex items-center gap-3 group cursor-pointer" onClick={() => setActiveTab('picker')}>
             <div className="w-10 h-10 bg-brutal-teal border-2 border-brutal-dark shadow-hard-sm group-hover:shadow-hard transition-all flex items-center justify-center">
-              <span className="text-brutal-dark font-black text-2xl">W</span>
+              <span className="text-brutal-dark font-black text-lg">W?</span>
             </div>
             <h1 className="text-2xl font-black text-brutal-dark uppercase tracking-tighter italic">Who.Will?</h1>
           </div>
