@@ -9,8 +9,8 @@ interface Database {
   users: Record<string, UserAccount>;
 }
 
-// Simple in-memory database
-let db: Database = {
+// Default database structure
+const defaultDb: Database = {
   users: {
     admin: {
       password: "admin123",
@@ -30,6 +30,24 @@ let db: Database = {
     }
   }
 };
+
+// Load database from localStorage or use default
+const loadDatabase = (): Database => {
+  try {
+    const saved = localStorage.getItem('who-will-db');
+    return saved ? JSON.parse(saved) : defaultDb;
+  } catch {
+    return defaultDb;
+  }
+};
+
+// Save database to localStorage
+const saveDatabase = (database: Database): void => {
+  localStorage.setItem('who-will-db', JSON.stringify(database));
+};
+
+// Initialize database
+let db: Database = loadDatabase();
 
 export const authenticateUser = (username: string, password: string): boolean => {
   const user = db.users[username];
@@ -54,6 +72,7 @@ export const getUserData = (username: string): User[] => {
 export const saveUserData = (username: string, data: User[]): void => {
   if (db.users[username]) {
     db.users[username].data = data;
+    saveDatabase(db);
   }
 };
 
@@ -65,4 +84,5 @@ export const createUser = (username: string, password: string): void => {
       { id: "2", name: "Person 2", count: 0, color: "#FF6F61" }
     ]
   };
+  saveDatabase(db);
 };
